@@ -1,5 +1,6 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
+const applicationMode = reqire('../models')
 const { authService, userService, tokenService, emailService } = require('../services');
 
 const register = catchAsync(async (req, res) => {
@@ -36,6 +37,11 @@ const resetPassword = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const settingApplicationMode = catchAsync(async (res) => {
+  let mode = await applicationMode.find({}).sort({_id: -1}).limit(1)
+  res.send(mode.length ? mode[0] : {})
+})
+
 module.exports = {
   register,
   login,
@@ -43,4 +49,5 @@ module.exports = {
   refreshTokens,
   forgotPassword,
   resetPassword,
+  settingApplicationMode
 };
